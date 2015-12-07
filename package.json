@@ -1,0 +1,41 @@
+{
+  "name": "yaml-fragment",
+  "version": "0.0.0",
+  "description": "Write your yaml document in fragments and pull them together into one.",
+  "main": "src/index",
+  "keywords": [
+    "yaml",
+    "$ref",
+    "swagger"
+  ],
+  "author": {
+    "name": "Mike Stead",
+    "url": "https://github.com/mikestead"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/mikestead/yaml-fragment",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikestead/yaml-fragment.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mikestead/yaml-fragment/issues"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "scripts": {
+    "lint": "eslint src test",
+    "test": "mocha --recursive"
+  },
+  "dependencies": {
+    "glob": "^6.0.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^4.1.6",
+    "eslint": "^1.10.3",
+    "eslint-config-rackt": "^1.1.1",
+    "expect": "^1.13.0",
+    "mocha": "^2.3.4"
+  }
+}

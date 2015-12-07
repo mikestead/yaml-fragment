@@ -1,0 +1,10 @@
+{
+	"extends": "rackt",
+	"env": {
+		"mocha": true,
+		"node": true
+	},
+	"rules": {
+		"valid-jsdoc": 2
+	}
+}

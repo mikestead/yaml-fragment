@@ -1,0 +1,15 @@
+swagger: "2.0"
+info:
+  $ref: ./info.yml
+host: petstore.swagger.io
+basePath: /v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  $ref: ./paths/.map.yml
+definitions:
+  $ref: ./definitions/.map.yml
