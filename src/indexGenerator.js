@@ -18,8 +18,8 @@ exports.renderIndex = renderIndex
  * @returns {Promise.<T>}
  */
 function genIndex(indexFile, outputFile, options) {
-	return renderIndex(indexFile, options)
-		.then(contents => util.writeFile(outputFile, contents))
+	const contents = renderIndex(indexFile, options)
+	return util.writeFile(outputFile, contents)
 }
 
 /**
