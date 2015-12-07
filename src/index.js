@@ -1,5 +1,5 @@
-const collectionGen = require('collectionGenerator')
-const indexGen = require('indexGenerator')
+const collectionGen = require('./collectionGenerator')
+const indexGen = require('./indexGenerator')
 
 /**
  * Generate a yaml document from an index yaml file which may references

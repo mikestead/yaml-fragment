@@ -12,7 +12,8 @@ exports.writeFile = writeFile
  * - indent: Indentation string to use in yaml. Defaults to two spaces.
  * - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
  * - formatMapKey: Format a filename to a yaml map key. Defaults to return raw filename.
- * - quoteMapKeyRegex: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to null.
+ * - quoteMapKeyRegex: Regex to test map keys. If it fails the key will be wrapped in quotes.
+ *                      Defaults to anything starting with a number.
  * - relativePaths: True if using relative paths in generated collection files. Defaults to true.
  *
  * @returns {*}
@@ -22,7 +23,7 @@ function applyDefaultOptions(options) {
 		indent: DEFAULT_INDENT,
 		autoGenComment: DEFAULT_AUTO_GEN_COMMENT,
 		formatMapKey: file => file.name,
-		quoteMapKeyRegex: null,
+		quoteMapKeyRegex: /^[0-9]/,
 		relativePaths: true
 	}, options)
 }
