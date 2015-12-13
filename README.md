@@ -70,8 +70,8 @@ definitions:
 
 #### Lists
 
-To generate a list based on each yaml file in a fragment directory, add a `.list.yml`
-file to the folder and reference this file in a parent document.
+To generate a yaml list based on each fragment file in a directory, add a `.list.yml`
+file to this same directory and reference it in a parent document.
 
 During document pre-generation any `.list.yml` will be populated with references to each
 yaml fragment file in the same directory, e.g.
@@ -84,8 +84,8 @@ yaml fragment file in the same directory, e.g.
 
 #### Maps
 
-To generate a map based on each yaml file in a fragment directory, add a `.map.yml`
-file to the folder and reference this file in a parent document.
+To generate a yaml map based on each fragment file in a directory, add a `.map.yml`
+file to this same directory and reference it in a parent document.
 
 During document pre-generation any `.map.yml` will be populated with references to each
 yaml fragment file in the same directory, e.g.
@@ -100,10 +100,12 @@ Pets:
 ```
 
 The key for each defaults to the filename it references, however you can process these names
-via the option `formatMapKey`. For example if our key is a swagger path we can use underscores 
+via the option `formatMapKey`. For example if the key is a swagger path we can use underscores 
 in the filename to represent forward slash and then replace these during generation.
 
 	options.formatMapKey = file => file.name.split('_').join('/')
+	
+This would convert the filename `_pets_{petId}` to the key `/pets/{petId}`.
 	
 #### Example
 
