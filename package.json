@@ -1,7 +1,7 @@
 {
   "name": "yaml-fragment",
   "version": "0.0.0",
-  "description": "Write your yaml document in fragments and pull them together into one.",
+  "description": "A tool to construct a yaml document from smaller yaml documents",
   "main": "src/index",
   "keywords": [
     "yaml",

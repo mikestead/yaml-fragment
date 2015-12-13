@@ -5,7 +5,6 @@ const util = require('./util')
 exports.genIndex = genIndex
 exports.renderIndex = renderIndex
 
-
 /**
  * Generate the root index yaml file.
  *
@@ -70,7 +69,7 @@ function replaceFileRefs(filePath, options) {
  */
 function processFragment(fragment, dirPath, options) {
 	var results = fragment.match(/^[ ]*(- )?\$ref: \.\.?\/.+\.ya?ml$/gm)
-	while (!!results && results.length > 0) {
+	while (results && results.length > 0) {
 		var ref = results.shift()
 		var fragPath = path.join(dirPath, ref.substr(ref.indexOf('.')))
 		var isList = ref.trim().indexOf('-') === 0
