@@ -3,7 +3,7 @@ const fs = require('fs')
 const gen = require('../src/indexGenerator')
 const util = require('../src/util')
 
-const DEFAULT_OPTIONS = util.applyDefaultOptions({autoGenComment: ''})
+const DEFAULT_OPTIONS = util.applyDefaultOptions({ autoGenComment: '' })
 
 describe('indexGenerator', () => {
 	describe('renderIndex', () => {

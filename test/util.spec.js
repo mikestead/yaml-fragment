@@ -6,7 +6,7 @@ describe('util', () => {
 		it('should apply default format key option', () => {
 			const options = util.applyDefaultOptions({})
 			expect(options.formatMapKey).toBeA('function')
-			expect(options.formatMapKey({name:'a'})).toBe('a')
+			expect(options.formatMapKey({ name: 'a' })).toBe('a')
 		})
 
 		it('should apply default indent', () => {
@@ -23,7 +23,7 @@ describe('util', () => {
 			const autoGenComment = 'a'
 			const formatMapKey = a => a
 			const indent = '\t'
-			const options = util.applyDefaultOptions({autoGenComment, formatMapKey, indent})
+			const options = util.applyDefaultOptions({ autoGenComment, formatMapKey, indent })
 
 			expect(options.autoGenComment).toBe(autoGenComment)
 			expect(options.formatMapKey).toBe(formatMapKey)

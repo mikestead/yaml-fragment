@@ -7,19 +7,19 @@ const indexGen = require('./indexGenerator')
  *
  * Any `.map.yml` or `.list.yml` collection files will be generated first if found.
  *
- * @param baseDir The root directory to search for collection files to generate
- * @param indexFile The index yaml file to base document generation off
- * @param outputFile The output path of the generated yaml document
- * @param options
+ * @param {String} baseDir The root directory to search for collection files to generate
+ * @param {String} indexFile The index yaml file to base document generation off
+ * @param {String} outputFile The output path of the generated yaml document
+ * @param {Object} options
  *  - indent: Indentation string to use in yaml. Defaults to two spaces.
  *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
  *  - formatMapKey: Function to format a file to a yaml map key. Defaults to return raw filename.
  *  - quoteMapKeyRegex: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to null.
  *  - relativePaths: True if using relative paths in generated collection files. Defaults to true.
  *
- * @returns {Promise.<T>}
+ * @returns {Promise.<T>} A Promise which resolves when the generated document has been written to disk
  */
-exports.genDocument = function(baseDir, indexFile, outputFile, options) {
+exports.genDocument = function (baseDir, indexFile, outputFile, options) {
 	return collectionGen.genCollectionFiles(baseDir, options)
 		.then(() => indexGen.genIndex(indexFile, outputFile, options))
 }

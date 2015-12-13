@@ -5,8 +5,8 @@ const util = require('../src/util')
 
 const autoGenComment = ''
 const formatMapKey = file => file.name.split('_').join('/')
-const DEFAULT_OPTIONS = util.applyDefaultOptions({autoGenComment})
-const PATH_FORMAT_OPTIONS = util.applyDefaultOptions({formatMapKey, autoGenComment})
+const DEFAULT_OPTIONS = util.applyDefaultOptions({ autoGenComment })
+const PATH_FORMAT_OPTIONS = util.applyDefaultOptions({ formatMapKey, autoGenComment })
 const BASE_DIR = './test/_fixture'
 const DEFINITIONS_MAP =
 `Error:
@@ -29,9 +29,9 @@ const PATHS_MAP =
 `
 
 const EXPECTED_FILES = [
-	{path: './test/_fixture/definitions/.list.yml', expectedContents: DEFINITIONS_LIST},
-	{path: './test/_fixture/definitions/.map.yml', expectedContents: DEFINITIONS_MAP},
-	{path: './test/_fixture/paths/.map.yml', expectedContents: PATHS_MAP}
+	{ path: './test/_fixture/definitions/.list.yml', expectedContents: DEFINITIONS_LIST },
+	{ path: './test/_fixture/definitions/.map.yml', expectedContents: DEFINITIONS_MAP },
+	{ path: './test/_fixture/paths/.map.yml', expectedContents: PATHS_MAP }
 ]
 
 describe('collectionGenerator', () => {

@@ -12,7 +12,12 @@ exports.renderCollectionFile = renderCollectionFile
  * with a list or map of $ref's to each file.
  *
  * @param {String} baseDir The root directory to recursively scan for collection files to generate
- * @param {Object} options The available generation options
+ * @param {Object} options
+ *  - indent: Indentation string to use in yaml. Defaults to two spaces.
+ *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
+ *  - formatMapKey: Function to format a file to a yaml map key. Defaults to return raw filename.
+ *  - quoteMapKeyRegex: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to null.
+ *  - relativePaths: True if using relative paths in generated collection files. Defaults to true.
  * @returns {Promise.<T>} A promise which will resolve with all paths which have been ge
  */
 function genCollectionFiles(baseDir, options) {
@@ -24,12 +29,12 @@ function genCollectionFiles(baseDir, options) {
 /**
  * Recursively searches baseDir for `.map.yml` and `.list.yml` files.
  *
- * @param {string} baseDir
- * @returns {Promise|*}
+ * @param {String} baseDir Base directory to search for collection files
+ * @returns {Promise|*} A promise which resolves with all found collection file paths.
  */
 function findCollectionFiles(baseDir) {
 	return new Promise((resolve, reject) => {
-		glob(`${baseDir}/**/+(.map|.list)+(.yml|.yaml)`, {dot: true}, (err, files) => {
+		glob(`${baseDir}/**/+(.map|.list)+(.yml|.yaml)`, { dot: true }, (err, files) => {
 			if (err) reject(err)
 			else resolve(files)
 		})
@@ -49,10 +54,10 @@ function generateCollectionFiles(baseDir, collectionFilePaths, options) {
  * This contains references to all yaml files in the directory it resides
  * in a list or map yaml format.
  *
- * @param baseDir
- * @param filePath
- * @param options
- * @returns {Promise|*}
+ * @param {String} baseDir Base directory where the collection file was found
+ * @param {String} filePath Path to the collection file
+ * @param {Object} options Rendering options
+ * @returns {Promise|*} A Promise which resolves with the content of the colletion file
  */
 function renderCollectionFile(baseDir, filePath, options) {
 	const dirPath = path.dirname(filePath)
@@ -64,7 +69,7 @@ function renderCollectionFile(baseDir, filePath, options) {
 			if (err) return reject(err)
 			const autoGenComment = options.autoGenComment ? `${options.autoGenComment.trim()}\n` : ''
 			const contents = files
-				.map(filePath => Object.assign({filePath}, path.parse(filePath)))
+				.map(filePath => Object.assign({ filePath }, path.parse(filePath)))
 				.sort((a, b) => a.name.localeCompare(b.name))
 				.reduce((s, file) => {
 					const refPath = options.relativePaths ?

@@ -12,10 +12,12 @@ exports.renderIndex = renderIndex
  * - Generates any collection yaml files and writes them to disk
  * - Generates the index yaml file and writes it to chosen location
  *
- * @param indexFile The path to the index yaml template file to render
- * @param outputFile The path where the rendered file should be written to
- * @param options
- * @returns {Promise.<T>}
+ * @param {String} indexFile The path to the index yaml template file to render
+ * @param {String} outputFile The path where the rendered file should be written to
+ * @param {Object} options
+ *  - indent: Indentation string to use in yaml. Defaults to two spaces.
+ *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
+ * @returns {Promise.<T>} A Promise which resolves when the generated document has been written to disk
  */
 function genIndex(indexFile, outputFile, options) {
 	const contents = renderIndex(indexFile, options)
@@ -27,10 +29,11 @@ function genIndex(indexFile, outputFile, options) {
  *
  * Note this on does NOT generate the collection files before rendering.
  *
- * @param indexFile The index file to base generate off
- * @param options Rendering options:
- *  - indent The string indent to use. Defaults to 2 spaces.
- *  - autoGenComment The label to insert into the header of generated files. Defaults to '# Auto Generated'.
+ * @param {String} indexFile The index file to base generate off
+ * @param {Object} options
+ *  - indent: Indentation string to use in yaml. Defaults to two spaces.
+ *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
+ * @returns {String} The rendered document
  */
 function renderIndex(indexFile, options) {
 	options = util.applyDefaultOptions(options)
@@ -43,9 +46,11 @@ function renderIndex(indexFile, options) {
  * $refs to local files with the corresponding yaml fragment and return the
  * resolved document.
  *
- * @param filePath
- * @param options
- * @returns resolved yaml document
+ * @param {String} filePath The root yaml document to search for refs to fragments.
+ * @param {Object} options
+ *  - indent: Indentation string to use in yaml. Defaults to two spaces.
+ *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
+ * @returns {String} The resolved yaml document
  */
 function replaceFileRefs(filePath, options) {
 	const dirPath = path.dirname(filePath)
@@ -53,7 +58,7 @@ function replaceFileRefs(filePath, options) {
 	return processFragment(doc, dirPath, options)
 }
 
-/**
+/*
  * 1. find all refs in fragment
  * 2. for each ref
  *    - determine its white space indent
@@ -84,13 +89,10 @@ function processFragment(fragment, dirPath, options) {
 	return fragment
 }
 
-/**
+/*
  * Each `.map.yml` and `.list.yml` file contains a generated comment at start.
  *
  * When we generate the index we remove these from the output.
- *
- * @param lines
- * @returns {*}
  */
 function removeAutoGenComment(lines, options) {
 	if (lines[0] && lines[0].trim() === options.autoGenComment) {
