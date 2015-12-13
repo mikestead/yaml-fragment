@@ -5,6 +5,7 @@
 		"node": true
 	},
 	"rules": {
+		"indent": [2, "tab"],
 		"valid-jsdoc": 2
 	}
 }
