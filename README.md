@@ -1,6 +1,6 @@
 # Yaml Fragment
 
-[![Build Status](https://travis-ci.org/mikestead/yaml-fragment.svg?branch=master)](https://travis-ci.org/mikestead/yaml-fragment)
+[![Build Status](https://travis-ci.org/mikestead/yaml-fragment.svg?branch=master)](https://travis-ci.org/mikestead/yaml-fragment) [![npm version](https://img.shields.io/npm/v/yaml-fragment.svg?style=flat-square)](https://www.npmjs.com/package/yaml-fragment)
 
 A tool to construct a yaml document from smaller yaml documents.
 
