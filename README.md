@@ -1,5 +1,7 @@
 # Yaml Fragment
 
+[![Build Status](https://travis-ci.org/mikestead/yaml-fragment.svg?branch=master)](https://travis-ci.org/mikestead/yaml-fragment)
+
 A tool to construct a yaml document from smaller yaml documents.
 
 The aim is to generate a single yaml document which is formatted exactly as you wrote
@@ -35,9 +37,9 @@ yamlFragment.genDocument(
 #### Available options
 
 - **indent**: Indentation string to use in yaml. Defaults to two spaces.
-- **autoGenComment**: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
+- **autoGenComment**: A comment to place at the top of any generated file. Defaults to `# Auto Generated`.
 - **formatMapKey**: Function to format a [parsed path object](https://nodejs.org/api/path.html#path_path_parse_pathstring) to a yaml map key. Defaults to return raw filename.
-- **quoteMapKeyRegex**: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to null.
+- **quoteMapKeyRegex**: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to wrap anything starting with a number.
 - **relativePaths**: True if using relative paths in generated collection files. Defaults to true.
 
 ### Fragments
@@ -68,11 +70,11 @@ definitions:
 
 #### Lists
 
-To generate a list based on each yaml file in a directory, add a `.list.yml`
+To generate a list based on each yaml file in a fragment directory, add a `.list.yml`
 file to the folder and reference this file in a parent document.
 
 During document pre-generation any `.list.yml` will be populated with references to each
-yaml file in the same directory, e.g.
+yaml fragment file in the same directory, e.g.
 
 ```yaml
 - $ref: ./Error.yml
@@ -82,11 +84,11 @@ yaml file in the same directory, e.g.
 
 #### Maps
 
-To generate a map based on each yaml file in a directory, add a `.map.yml`
+To generate a map based on each yaml file in a fragment directory, add a `.map.yml`
 file to the folder and reference this file in a parent document.
 
 During document pre-generation any `.map.yml` will be populated with references to each
-yaml file in the same directory, e.g.
+yaml fragment file in the same directory, e.g.
 
 ```yaml
 Error:
