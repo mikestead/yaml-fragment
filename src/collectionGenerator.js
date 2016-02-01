@@ -70,7 +70,7 @@ function renderCollectionFile(baseDir, filePath, options) {
 			const autoGenComment = options.autoGenComment ? `${options.autoGenComment.trim()}\n` : ''
 			const contents = files
 				.map(filePath => Object.assign({ filePath }, path.parse(filePath)))
-				.sort((a, b) => a.name.localeCompare(b.name))
+				.sort((a, b) => options.sortCollection(a, b))
 				.reduce((s, file) => {
 					const refPath = options.relativePaths ?
 								file.base :
