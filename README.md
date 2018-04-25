@@ -7,14 +7,13 @@ A tool to construct a yaml document from smaller yaml documents.
 The aim is to generate a single yaml document which is formatted exactly as you wrote
 your referenced fragments, making it easy to consume by human eye or machine.
 
-Transforming to json and back to yaml can lose some original formatting, because of this no 
-transformation is done, instead each fragment is inserted where it's referenced in 
+Transforming to json and back to yaml can lose some original formatting, because of this no
+transformation is done, instead each fragment is inserted where it's referenced in
 a parent document.
 
 [Swagger](http://swagger.io/) [spec](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md)
-generation is a primary use case, but it can be used anywhere you have an unwieldy yaml document 
+generation is a primary use case, but it can be used anywhere you have an unwieldy yaml document
 which would be easier to maintain in fragments.
- 
 
 ## Installation
 
@@ -28,23 +27,24 @@ npm install --save yaml-fragment
 import yamlFragment from 'yaml-fragment'
 
 yamlFragment.genDocument(
-	'./spec',             // base directory of your fragments
-	'./spec/index.yml',   // the root document which references fragments
-	'./spec.yml',         // The file to generate
-	options)              // Optional options object
+  './spec', // base directory of your fragments
+  './spec/index.yml', // the root document which references fragments
+  './spec.yml', // The file to generate
+  options
+) // Optional options object
 ```
 
 #### Available options
 
-- **indent**: Indentation string to use in yaml. Defaults to two spaces.
-- **autoGenComment**: A comment to place at the top of any generated file. Defaults to `# Auto Generated`.
-- **formatMapKey**: Function to format a [parsed path object](https://nodejs.org/api/path.html#path_path_parse_pathstring) to a yaml map key. Defaults to return raw filename.
-- **quoteMapKeyRegex**: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to wrap anything starting with a number.
-- **relativePaths**: True if using relative paths in generated collection files. Defaults to true.
+* **indent**: Indentation string to use in yaml. Defaults to two spaces.
+* **autoGenComment**: A comment to place at the top of any generated file. Defaults to `# Auto Generated`.
+* **formatMapKey**: Function to format a [parsed path object](https://nodejs.org/api/path.html#path_path_parse_pathstring) to a yaml map key. Defaults to return raw filename.
+* **quoteMapKeyRegex**: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to wrap anything starting with a number.
+* **relativePaths**: True if using relative paths in generated collection files. Defaults to true.
 
 ### Fragments
 
-Start with a base document which includes `$ref`s to local fragments. 
+Start with a base document which includes `$ref`s to local fragments.
 
 Note: To be replaced, `$ref`s must begin with `./` or `../`.
 
@@ -100,13 +100,13 @@ Pets:
 ```
 
 The key for each defaults to the filename it references, however you can process these names
-via the option `formatMapKey`. For example if the key is a swagger path we can use underscores 
+via the option `formatMapKey`. For example if the key is a swagger path we can use underscores
 in the filename to represent forward slash and then replace these during generation.
 
-	options.formatMapKey = file => file.name.split('_').join('/')
-	
+    options.formatMapKey = file => file.name.split('_').join('/')
+
 This would convert the filename `_pets_{petId}` to the key `/pets/{petId}`.
-	
+
 #### Example
 
 [See here](https://github.com/mikestead/yaml-fragment/tree/master/test/_fixture) for a more complete
