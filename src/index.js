@@ -19,7 +19,8 @@ const indexGen = require('./indexGenerator')
  *
  * @returns {Promise.<T>} A Promise which resolves when the generated document has been written to disk
  */
-exports.genDocument = function (baseDir, indexFile, outputFile, options) {
-	return collectionGen.genCollectionFiles(baseDir, options)
-		.then(() => indexGen.genIndex(indexFile, outputFile, options))
+exports.genDocument = function(baseDir, indexFile, outputFile, options) {
+  return collectionGen
+    .genCollectionFiles(baseDir, options)
+    .then(() => indexGen.genIndex(indexFile, outputFile, options))
 }

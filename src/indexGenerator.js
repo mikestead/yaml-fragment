@@ -19,8 +19,8 @@ exports.renderIndex = renderIndex
  * @returns {Promise.<T>} A Promise which resolves when the generated document has been written to disk
  */
 function genIndex(indexFile, outputFile, options) {
-	const contents = renderIndex(indexFile, options)
-	return util.writeFile(outputFile, contents)
+  const contents = renderIndex(indexFile, options)
+  return util.writeFile(outputFile, contents)
 }
 
 /**
@@ -35,10 +35,9 @@ function genIndex(indexFile, outputFile, options) {
  * @returns {String} The rendered document
  */
 function renderIndex(indexFile, options) {
-	options = util.applyDefaultOptions(options)
-	return replaceFileRefs(indexFile, options)
+  options = util.applyDefaultOptions(options)
+  return replaceFileRefs(indexFile, options)
 }
-
 
 /**
  * Starting from the root file specified, recursively replace all
@@ -52,9 +51,9 @@ function renderIndex(indexFile, options) {
  * @returns {String} The resolved yaml document
  */
 function replaceFileRefs(filePath, options) {
-	const dirPath = path.dirname(filePath)
-	const doc = fs.readFileSync(filePath, 'utf8')
-	return processFragment(doc, dirPath, options)
+  const dirPath = path.dirname(filePath)
+  const doc = fs.readFileSync(filePath, 'utf8')
+  return processFragment(doc, dirPath, options)
 }
 
 /*
@@ -68,24 +67,24 @@ function replaceFileRefs(filePath, options) {
  * 3. return resolved fragment
  */
 function processFragment(fragment, dirPath, options) {
-	var results = fragment.match(/^[ ]*(- )?\$ref: \.\.?\/.+\.ya?ml$/gm)
-	while (results && results.length > 0) {
-		var ref = results.shift()
-		var fragPath = path.join(dirPath, ref.substr(ref.indexOf('.')))
-		var isList = ref.trim().indexOf('-') === 0
-		var ws = ref.match(/^\s*/)[0]
-		var nextFragment = fs.readFileSync(fragPath, 'utf8')
-		var lines = removeAutoGenComment(nextFragment.split('\n'), options)
-		var mark = ws
-		if (isList) {
-			mark += '- '
-			ws += options.indent
-		}
-		nextFragment = mark + lines.join(`\n${ws}`).trim()
-		nextFragment = processFragment(nextFragment, path.dirname(fragPath), options)
-		fragment = fragment.split(ref).join(nextFragment)
-	}
-	return fragment
+  var results = fragment.match(/^[ ]*(- )?\$ref: \.\.?\/.+\.ya?ml$/gm)
+  while (results && results.length > 0) {
+    var ref = results.shift()
+    var fragPath = path.join(dirPath, ref.substr(ref.indexOf('.')))
+    var isList = ref.trim().indexOf('-') === 0
+    var ws = ref.match(/^\s*/)[0]
+    var nextFragment = fs.readFileSync(fragPath, 'utf8')
+    var lines = removeAutoGenComment(nextFragment.split('\n'), options)
+    var mark = ws
+    if (isList) {
+      mark += '- '
+      ws += options.indent
+    }
+    nextFragment = mark + lines.join(`\n${ws}`).trim()
+    nextFragment = processFragment(nextFragment, path.dirname(fragPath), options)
+    fragment = fragment.split(ref).join(nextFragment)
+  }
+  return fragment
 }
 
 /*
@@ -94,8 +93,8 @@ function processFragment(fragment, dirPath, options) {
  * When we generate the index we remove these from the output.
  */
 function removeAutoGenComment(lines, options) {
-	if (lines[0] && lines[0].trim() === options.autoGenComment) {
-		lines.shift()
-	}
-	return lines
+  if (lines[0] && lines[0].trim() === options.autoGenComment) {
+    lines.shift()
+  }
+  return lines
 }

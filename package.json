@@ -5,7 +5,7 @@
   "main": "src/index",
   "keywords": [
     "yaml",
-    "$ref",
+    "openapi",
     "swagger"
   ],
   "author": {
@@ -25,17 +25,18 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "lint": "eslint src test",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "format": "prettier --write \"{README.md,{src,test}/**/*.*\"}",
+    "precommit": "pretty-quick --staged"
   },
   "dependencies": {
     "glob": "^6.0.1"
   },
   "devDependencies": {
-    "babel-eslint": "^4.1.6",
-    "eslint": "^1.10.3",
-    "eslint-config-rackt": "^1.1.1",
     "expect": "^1.13.0",
-    "mocha": "^2.3.4"
+    "husky": "^0.14.3",
+    "mocha": "^2.3.4",
+    "prettier": "1.12.1",
+    "pretty-quick": "^1.4.1"
   }
 }

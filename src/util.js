@@ -19,14 +19,17 @@ exports.writeFile = writeFile
  * @returns {Object} The resolved options with defaults applied
  */
 function applyDefaultOptions(options) {
-	return Object.assign({
-		indent: DEFAULT_INDENT,
-		autoGenComment: DEFAULT_AUTO_GEN_COMMENT,
-		formatMapKey: file => file.name,
-		sortCollection: (a, b) => a.name.localeCompare(b.name),
-		quoteMapKeyRegex: /^[0-9]/,
-		relativePaths: true
-	}, options)
+  return Object.assign(
+    {
+      indent: DEFAULT_INDENT,
+      autoGenComment: DEFAULT_AUTO_GEN_COMMENT,
+      formatMapKey: file => file.name,
+      sortCollection: (a, b) => a.name.localeCompare(b.name),
+      quoteMapKeyRegex: /^[0-9]/,
+      relativePaths: true
+    },
+    options
+  )
 }
 
 /**
@@ -37,7 +40,7 @@ function applyDefaultOptions(options) {
  * @returns {Promise} A Promise which resolves once the file has been written to disk
  */
 function writeFile(path, contents) {
-	return new Promise((resolve, reject) => {
-		fs.writeFile(path, contents, err => err ? reject(err) : resolve())
-	})
+  return new Promise((resolve, reject) => {
+    fs.writeFile(path, contents, err => (err ? reject(err) : resolve()))
+  })
 }
