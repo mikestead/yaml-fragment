@@ -1,5 +1,6 @@
-const collectionGen = require('./collectionGenerator')
+const { genCollectionFiles } = require('./collectionGenerator')
 const indexGen = require('./indexGenerator')
+const { applyDefaultOptions, validateOptions, resolveIndexFile } = require('./util')
 
 /**
  * Generate a yaml document from an index yaml file which may references
@@ -16,11 +17,13 @@ const indexGen = require('./indexGenerator')
  *  - formatMapKey: Function to format a file to a yaml map key. Defaults to return raw filename.
  *  - quoteMapKeyRegex: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to null.
  *  - relativePaths: True if using relative paths in generated collection files. Defaults to true.
- *
+ *  - openapi: True if generating an OpenAPI specification. Defaults to undefined.
  * @returns {Promise.<T>} A Promise which resolves when the generated document has been written to disk
  */
 exports.genDocument = function(baseDir, indexFile, outputFile, options) {
-  return collectionGen
-    .genCollectionFiles(baseDir, options)
+  options = applyDefaultOptions(options)
+  indexFile = resolveIndexFile(baseDir, indexFile)
+  return validateOptions(baseDir, indexFile, outputFile, options)
+    .then(() => genCollectionFiles(baseDir, options))
     .then(() => indexGen.genIndex(indexFile, outputFile, options))
 }

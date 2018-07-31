@@ -21,7 +21,6 @@ exports.renderCollectionFile = renderCollectionFile
  * @returns {Promise.<T>} A promise which will resolve with all paths which have been ge
  */
 function genCollectionFiles(baseDir, options) {
-  options = util.applyDefaultOptions(options)
   return findCollectionFiles(baseDir).then(paths =>
     generateCollectionFiles(baseDir, paths, options)
   )

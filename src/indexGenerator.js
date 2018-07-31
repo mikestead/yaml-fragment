@@ -35,7 +35,6 @@ function genIndex(indexFile, outputFile, options) {
  * @returns {String} The rendered document
  */
 function renderIndex(indexFile, options) {
-  options = util.applyDefaultOptions(options)
   return replaceFileRefs(indexFile, options)
 }
 
