@@ -1,13 +1,11 @@
 const expect = require('expect')
-const fs = require('fs')
-const gen = require('../src/collectionGenerator')
-const util = require('../src/util')
+const { renderCollectionFile } = require('../src/collectionGenerator')
+const { applyDefaultOptions } = require('../src/options')
 
-const autoGenComment = ''
-const formatMapKey = file => file.name.split('_').join('/')
-const DEFAULT_OPTIONS = util.applyDefaultOptions({ autoGenComment })
-const PATH_FORMAT_OPTIONS = util.applyDefaultOptions({ formatMapKey, autoGenComment })
-const BASE_DIR = './test/_fixture'
+const formatMapKey = dir => file => file.name.split('_').join('/')
+const ROOT_DIR = './test/_fixture'
+const DEFAULT_OPTIONS = applyDefaultOptions({ rootDir: ROOT_DIR })
+const PATH_FORMAT_OPTIONS = applyDefaultOptions({ rootDir: ROOT_DIR, formatMapKey })
 const DEFINITIONS_MAP = `Error:
   $ref: ./Error.yml
 Pet:
@@ -32,38 +30,23 @@ const EXPECTED_FILES = [
 ]
 
 describe('collectionGenerator', () => {
-  describe('findCollectionFiles', () => {
-    it('should locate all .list.yml and .map.yml in directory tree', () =>
-      gen
-        .findCollectionFiles('./test/_fixture')
-        .then(files => expect(files).toEqual(EXPECTED_FILES.map(file => file.path))))
-  })
-
   describe('renderCollectionFile', () => {
-    it('should scan parent folder for yaml fragments and render yaml MAP of refs to them', () =>
-      gen
-        .renderCollectionFile(BASE_DIR, './test/_fixture/definitions/.map.yml', DEFAULT_OPTIONS)
-        .then(contents => expect(contents).toBe(DEFINITIONS_MAP)))
+    it('should scan parent folder for yaml fragments and render yaml MAP of refs to them', () => {
+      const contents = renderCollectionFile('./test/_fixture/definitions/.map.yml', DEFAULT_OPTIONS)
+      expect(contents).toBe(DEFINITIONS_MAP)
+    })
 
-    it('should scan parent folder for yaml fragments and render yaml LIST of refs to them', () =>
-      gen
-        .renderCollectionFile(BASE_DIR, './test/_fixture/definitions/.list.yml', DEFAULT_OPTIONS)
-        .then(contents => expect(contents).toBe(DEFINITIONS_LIST)))
+    it('should scan parent folder for yaml fragments and render yaml LIST of refs to them', () => {
+      const contents = renderCollectionFile(
+        './test/_fixture/definitions/.list.yml',
+        DEFAULT_OPTIONS
+      )
+      expect(contents).toBe(DEFINITIONS_LIST)
+    })
 
-    it('should support custom formatting of keys in yaml MAP generation', () =>
-      gen
-        .renderCollectionFile(BASE_DIR, './test/_fixture/paths/.map.yml', PATH_FORMAT_OPTIONS)
-        .then(contents => expect(contents).toBe(PATHS_MAP)))
-  })
-
-  describe('genCollectionFiles', () => {
-    it('should render and save all .list.yml and .map.yml collection files', () =>
-      gen
-        .genCollectionFiles(BASE_DIR, PATH_FORMAT_OPTIONS)
-        .then(() =>
-          EXPECTED_FILES.forEach(file =>
-            expect(fs.readFileSync(file.path, 'utf8')).toBe(file.expectedContents)
-          )
-        ))
+    it('should support custom formatting of keys in yaml MAP generation', () => {
+      const contents = renderCollectionFile('./test/_fixture/paths/.map.yml', PATH_FORMAT_OPTIONS)
+      expect(contents).toBe(PATHS_MAP)
+    })
   })
 })

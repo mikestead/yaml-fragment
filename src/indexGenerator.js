@@ -1,41 +1,20 @@
 const path = require('path')
 const fs = require('fs')
-const util = require('./util')
+const { isCollectionFile, renderCollectionFile } = require('./collectionGenerator')
 
 exports.genIndex = genIndex
-exports.renderIndex = renderIndex
+exports.replaceFileRefs = replaceFileRefs
 
 /**
- * Generate the root index yaml file.
+ * Generate the root index yaml file and write it to disk.
  *
- * - Generates any collection yaml files and writes them to disk
- * - Generates the index yaml file and writes it to chosen location
+ * Formulates the index yaml file from fragments, generates any collection yaml files along the way.
  *
- * @param {String} indexFile The path to the index yaml template file to render
- * @param {String} outputFile The path where the rendered file should be written to
- * @param {Object} options
- *  - indent: Indentation string to use in yaml. Defaults to two spaces.
- *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
- * @returns {Promise.<T>} A Promise which resolves when the generated document has been written to disk
+ * @param {Options} opt document generation options
  */
-function genIndex(indexFile, outputFile, options) {
-  const contents = renderIndex(indexFile, options)
-  return util.writeFile(outputFile, contents)
-}
-
-/**
- * Render the root index yaml file.
- *
- * Note this on does NOT generate the collection files before rendering.
- *
- * @param {String} indexFile The index file to base generate off
- * @param {Object} options
- *  - indent: Indentation string to use in yaml. Defaults to two spaces.
- *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
- * @returns {String} The rendered document
- */
-function renderIndex(indexFile, options) {
-  return replaceFileRefs(indexFile, options)
+function genIndex(opt) {
+  const contents = replaceFileRefs(opt)
+  fs.writeFileSync(opt.outFile, contents, 'utf8')
 }
 
 /**
@@ -43,19 +22,16 @@ function renderIndex(indexFile, options) {
  * $refs to local files with the corresponding yaml fragment and return the
  * resolved document.
  *
- * @param {String} filePath The root yaml document to search for refs to fragments.
- * @param {Object} options
- *  - indent: Indentation string to use in yaml. Defaults to two spaces.
- *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
+ * @param {Options} opt document generation options
  * @returns {String} The resolved yaml document
  */
-function replaceFileRefs(filePath, options) {
-  const dirPath = path.dirname(filePath)
-  const doc = fs.readFileSync(filePath, 'utf8')
-  return processFragment(doc, dirPath, options)
+function replaceFileRefs(opt) {
+  const dirPath = path.dirname(opt.indexFile)
+  const doc = fs.readFileSync(opt.indexFile, 'utf8')
+  return processFragment(doc, dirPath, opt)
 }
 
-/*
+/**
  * 1. find all refs in fragment
  * 2. for each ref
  *    - determine its white space indent
@@ -64,36 +40,53 @@ function replaceFileRefs(filePath, options) {
  *    - recurse from 1 with this fragment
  *    - insert resolved fragment tree into original fragment
  * 3. return resolved fragment
+ *
+ * @param {string} fragment contents of a yaml fragment to process
+ * @param {string} dirPath directory where the fragment resides
+ * @param {Options} opt document generation options
+ * @returns {string} The recursively resolved yaml fragment contents
  */
-function processFragment(fragment, dirPath, options) {
-  var results = fragment.match(/^[ ]*(- )?\$ref: \.\.?\/.+\.ya?ml$/gm)
+function processFragment(fragment, dirPath, opt) {
+  let results = fragment.match(/^[ ]*(- )?\$ref: \.\.?\/.+\.ya?ml$/gm)
   while (results && results.length > 0) {
-    var ref = results.shift()
-    var fragPath = path.join(dirPath, ref.substr(ref.indexOf('.')))
-    var isList = ref.trim().indexOf('-') === 0
-    var ws = ref.match(/^\s*/)[0]
-    var nextFragment = fs.readFileSync(fragPath, 'utf8')
-    var lines = removeAutoGenComment(nextFragment.split('\n'), options)
-    var mark = ws
+    const ref = results.shift()
+    const fragPath = path.join(dirPath, ref.substr(ref.indexOf('.')))
+    const isList = ref.trim().indexOf('-') === 0
+    let ws = ref.match(/^\s*/)[0]
+    let nextFragment = loadFragment(fragPath, opt)
+    const lines = nextFragment.split('\n')
+    let mark = ws
     if (isList) {
       mark += '- '
-      ws += options.indent
+      ws += opt.indent
     }
     nextFragment = mark + lines.join(`\n${ws}`).trim()
-    nextFragment = processFragment(nextFragment, path.dirname(fragPath), options)
+    nextFragment = processFragment(nextFragment, path.dirname(fragPath), opt)
     fragment = fragment.split(ref).join(nextFragment)
   }
   return fragment
 }
 
-/*
- * Each `.map.yml` and `.list.yml` file contains a generated comment at start.
+const fragCache = {}
+
+/**
+ * Load the contents of a yaml fragment.
  *
- * When we generate the index we remove these from the output.
+ * If the path targets a .map.yml or .list.yml we generate
+ * that in memory and return it.
+ *
+ * @param {string} fragPath path to yaml fragment document
+ * @param {Options} opt document generation options
+ * @returns {String} The contents of the yaml fragment
  */
-function removeAutoGenComment(lines, options) {
-  if (lines[0] && lines[0].trim() === options.autoGenComment) {
-    lines.shift()
+function loadFragment(fragPath, opt) {
+  if (fragCache[fragPath]) return fragCache[fragPath]
+  let contents
+  if (isCollectionFile(fragPath)) {
+    contents = renderCollectionFile(fragPath, opt)
+  } else {
+    contents = fs.readFileSync(fragPath, 'utf8')
   }
-  return lines
+  fragCache[fragPath] = contents
+  return contents
 }

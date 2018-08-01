@@ -2,14 +2,15 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+const { AssertionError } = require('assert')
 const { genDocument } = require('./index')
 
 const opt = program
   .version(require('../package.json').version)
   .option('-d, --rootDir <dir>', 'root directory of your fragments', String)
   .option(
-    '-f, --rootFragment [fragment]',
-    'root document which references fragments',
+    '-i, --indexFile [fragment]',
+    'index document which references fragments',
     String,
     './index.yml'
   )
@@ -17,7 +18,12 @@ const opt = program
   .option('--openapi', 'openapi fragment processing')
   .parse(process.argv)
 
-genDocument(opt.rootDir, opt.rootFragment, opt.outFile, opt).then(complete, error)
+try {
+  genDocument(opt)
+  complete()
+} catch (e) {
+  error(e)
+}
 
 function complete() {
   console.info(chalk.bold.cyan(`Generated '${opt.outFile}'`))
@@ -25,7 +31,12 @@ function complete() {
 }
 
 function error(e) {
-  const msg = e instanceof Error ? e.message : e
-  console.error(chalk.red(msg))
+  if (e.stack && !(e instanceof AssertionError)) {
+    console.error(chalk.red('Unexpected error generating yaml document'))
+    console.error(`  ${chalk.red(e.stack)}`)
+  } else {
+    const msg = e instanceof Error ? e.message : e
+    console.error(chalk.red(msg))
+  }
   process.exit(1)
 }
