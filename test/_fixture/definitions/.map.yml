@@ -1,6 +1,0 @@
-Error:
-  $ref: ./Error.yml
-Pet:
-  $ref: ./Pet.yml
-Pets:
-  $ref: ./Pets.yml

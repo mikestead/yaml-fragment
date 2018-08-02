@@ -1,26 +1,16 @@
-const collectionGen = require('./collectionGenerator')
-const indexGen = require('./indexGenerator')
+const { genIndex } = require('./indexGenerator')
+const { applyDefaultOptions, validateOptions } = require('./options')
 
 /**
- * Generate a yaml document from an index yaml file which may references
+ * Generate a yaml document from an index yaml file which references
  * other local yaml fragments.
  *
- * Any `.map.yml` or `.list.yml` collection files will be generated first if found.
+ * Any `.map.yml` or `.list.yml` collection files will be generated in memory if found.
  *
- * @param {String} baseDir The root directory to search for collection files to generate
- * @param {String} indexFile The index yaml file to base document generation off
- * @param {String} outputFile The output path of the generated yaml document
- * @param {Object} options
- *  - indent: Indentation string to use in yaml. Defaults to two spaces.
- *  - autoGenComment: A comment to place at the top of any generated file. Defaults to '# Auto Generated'.
- *  - formatMapKey: Function to format a file to a yaml map key. Defaults to return raw filename.
- *  - quoteMapKeyRegex: Regex to test map keys. If it fails the key will be wrapped in quotes. Defaults to null.
- *  - relativePaths: True if using relative paths in generated collection files. Defaults to true.
- *
- * @returns {Promise.<T>} A Promise which resolves when the generated document has been written to disk
+ * @param {Options} opt document generation options
  */
-exports.genDocument = function(baseDir, indexFile, outputFile, options) {
-  return collectionGen
-    .genCollectionFiles(baseDir, options)
-    .then(() => indexGen.genIndex(indexFile, outputFile, options))
+exports.genDocument = function(opt) {
+  opt = applyDefaultOptions(opt)
+  validateOptions(opt)
+  genIndex(opt)
 }
