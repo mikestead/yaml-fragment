@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+/test
+.prettierignore
+.prettierrc.yml
+.travis.yml
+yarn.lock
