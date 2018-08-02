@@ -7,9 +7,8 @@ A tool to construct a yaml document from smaller yaml documents.
 Aims to generate a single yaml document formatted exactly as you wrote your referenced fragments,
 making it easy to share with humans or machine.
 
-Transforming to json and back to yaml can lose some original formatting, because of this no
-transformation is done, instead each fragment is inserted where it's referenced in
-a parent document.
+> Transforming to json and back to yaml can lose some original formatting, because of this no
+> transformation is done, instead each fragment is inserted where it's referenced in a parent document.
 
 [OpenAPI](https://www.openapis.org) [spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
 generation is a primary use case, but it can be used anywhere you have an unwieldy yaml document
@@ -84,7 +83,7 @@ genDocument({
 
 Start with a base document which includes `$ref`s to local fragments.
 
-_Important: To be replaced, `$ref paths must begin with`./`or`../`._
+_Important: To be replaced, $ref paths must begin with`./`or`../`._
 
 #### index.yml
 
