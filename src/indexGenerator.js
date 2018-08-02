@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const mkdirp = require('mkdirp')
 const { isCollectionFile, renderCollectionFile } = require('./collectionGenerator')
 
 exports.genIndex = genIndex
@@ -14,6 +15,7 @@ exports.replaceFileRefs = replaceFileRefs
  */
 function genIndex(opt) {
   const contents = replaceFileRefs(opt)
+  mkdirp.sync(path.dirname(opt.outFile))
   fs.writeFileSync(opt.outFile, contents, 'utf8')
 }
 

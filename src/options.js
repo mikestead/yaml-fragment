@@ -99,7 +99,11 @@ function collectionSorter(opt) {
 function keyFormatter(opt) {
   return function formatMapKey(dirPath) {
     if (opt.openapi && path.basename(dirPath) === 'paths') {
-      return file => file.name.split('_').join('/') // _pets_{id} => /pets/{id}
+      return file => {
+        // convert pets_{id} => /pets/{id}
+        const key = file.name.split('_').join('/')
+        return key[0] === '/' ? key : `/${key}`
+      }
     }
     return file => file.name
   }

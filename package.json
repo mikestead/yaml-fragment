@@ -33,7 +33,8 @@
     "precommit": "pretty-quick --staged"
   },
   "dependencies": {
-    "glob": "^6.0.1"
+    "glob": "^6.0.1",
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "chalk": "^2.4.1",
